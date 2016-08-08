@@ -1,0 +1,24 @@
+/*!
+	Theme Name: pink-charity-blog
+	Author: Padhraic
+	Version: 1.0
+	Author URI: www.zensogo.net
+	Theme URI: www.zensogo.net/pink-charity-blog
+	Tags: 
+	Description: This is a description for the pink-charity-blog theme.
+	License: GNU General Public License v2 or later
+	License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+@import "vendor/normalize";
+@import "vendor/bourbon/bourbon";
+@import "grid-settings";
+@import "base";
+@import "typography";
+@import "components";
+@import "wp-base";
+@import "header";
+@import "navigation";
+@import "content";
+@import "post-formats";
+@import "footer";

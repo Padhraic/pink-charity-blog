@@ -1,41 +1,55 @@
 <?php
 /**
- * The header for our theme.
+ * pink-charity-blog template for displaying the header
  *
- * Displays all of the <head> section and everything up till <div id="content">
- *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
+?>
 
-?><!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-<meta charset="<?php bloginfo( 'charset' ); ?>">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="profile" href="http://gmpg.org/xfn/11">
-<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="ie ie-no-support" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 7]>         <html class="ie ie7" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 8]>         <html class="ie ie8" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 9]>         <html class="ie ie9" <?php language_attributes(); ?>> <![endif]-->
+<!--[if gt IE 9]><!--> <html <?php language_attributes(); ?>> <!--<![endif]-->
+	<head>
+		<meta charset="<?php bloginfo( 'charset' ); ?>" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title><?php wp_title( ); ?></title>
+		<meta name="viewport" content="width=device-width" />
+		<!--[if lt IE 9]>
+			<script src="<?php echo get_template_directory_uri(); ?>/js/html5shiv.js"></script>
+		<![endif]-->
+		<?php wp_head(); ?>
+	</head>
+	<body <?php body_class(); ?>>
+		<div class="site">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+			<header class="site-header">
 
-<?php wp_head(); ?>
-</head>
+				<?php if ( '' != get_custom_header()->url ) : ?>
+					<img src="<?php header_image(); ?>" class="custom-header" height="<?php echo get_custom_header()->height; ?>" width="<?php echo get_custom_header()->width; ?>" alt="" />
+				<?php endif; ?>
 
-<body <?php body_class(); ?>>
+				<a class="logo" href="<?php echo home_url(); ?>" title="<?php bloginfo( 'name' ); ?>">
+					<h1 class="blog-name"><?php bloginfo( 'name' ); ?></h1>
+					<div class="blog-description"><?php bloginfo( 'description' ); ?></div>
+				</a>
 
-     <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <?php wp_nav_menu( array( 'theme_location' => 'primary', 'items_wrap' => '%3$s' ) ); ?>
-        </ul>
-    </nav>
-    
-	
-	<?php cleanblog_header(); ?>
+				<div class="menu"><?php
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
+					$nav_menu = wp_nav_menu(
+						array(
+							'container' => 'nav',
+							'container_class' => 'main-menu',
+							'items_wrap' => '<ul class="%2$s">%3$s</ul>',
+							'theme_location' => 'main-menu',
+							'fallback_cb' => '__return_false',
+						)
+					); ?>
+
+				</div>
+
+			</header>

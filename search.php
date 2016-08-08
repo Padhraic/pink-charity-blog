@@ -1,43 +1,57 @@
 <?php
 /**
- * The template for displaying search results pages.
+ * pink-charity-blog template for displaying Search-Results-Pages
  *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
 
 get_header(); ?>
 
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+	<section class="page-content primary" role="main"><?php
 
-			<?php do_action('cleanblog_search_top'); ?>
+		if ( have_posts() ) : ?>
 
-			<?php if ( have_posts() ) : ?>
+			<div class="search-title">
+				<h1 ><?php printf( __( 'Search Results for: %s', 'pink-charity-blog' ), get_search_query() ); ?></h1>
 
-				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
-				<?php
+				<div class="second-search">
+					<p>
+						<?php _e( 'Not what you searched for? Try again with some different keywords.', 'pink-charity-blog' ); ?>
+					</p>
 
-					/*
-					 * Include the Post-Format-specific template for the content.
-					 * If you want to override this in a child theme, then include a file
-					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-					 */
-					get_template_part( 'template-parts/content', 'search' );
-				?>
+					<?php get_search_form(); ?>
+				</div>
+			</div><?php
 
-			<?php endwhile; ?>
-			
-				<?php cleanblog_posts_navigation(); ?>
+			while ( have_posts() ) : the_post();
 
-			<?php else : ?>
+				get_template_part( 'loop', get_post_format() );
 
-				<?php get_template_part( 'template-parts/content', 'none' ); ?>
+				wp_link_pages(
+					array(
+						'before'           => '<div class="linked-page-nav"><p>' . sprintf( __( '<em>%s</em> is separated in multiple parts:', 'pink-charity-blog' ), get_the_title() ) . '<br />',
+						'after'            => '</p></div>',
+						'next_or_number'   => 'number',
+						'separator'        => ' ',
+						'pagelink'         => __( '&raquo; Part %', 'pink-charity-blog' ),
+					)
+				);
 
-			<?php endif; ?>
-			
-			<?php do_action('cleanblog_search_bottom'); ?>
+			endwhile;
 
-			</div>
-			<!-- /.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1 -->
+		else :
+
+			get_template_part( 'loop', 'empty' );
+
+		endif; ?>
+
+		<div class="pagination">
+
+			<?php get_template_part( 'template-part', 'pagination' ); ?>
+
+		</div>
+	</section>
 
 <?php get_footer(); ?>

@@ -1,49 +1,45 @@
 <?php
 /**
- * The main template file.
+ * pink-charity-blog Index template
  *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- * Learn more: http://codex.wordpress.org/Template_Hierarchy
- *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
 
 get_header(); ?>
 
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+	<section class="page-content primary" role="main">
+		<?php
+			if ( have_posts() ):
 
-			<?php do_action('cleanblog_index_top'); ?>
+				while ( have_posts() ) : the_post();
 
-			<?php if ( have_posts() ) : ?>
+					get_template_part( 'loop', get_post_format() );
 
-				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
-				<?php
+					wp_link_pages(
+						array(
+							'before'           => '<div class="linked-page-nav"><p>' . sprintf( __( '<em>%s</em> is separated in multiple parts:', 'pink-charity-blog' ), get_the_title() ) . '<br />',
+							'after'            => '</p></div>',
+							'next_or_number'   => 'number',
+							'separator'        => ' ',
+							'pagelink'         => __( '&raquo; Part %', 'pink-charity-blog' ),
+						)
+					);
 
-					/*
-					 * Include the Post-Format-specific template for the content.
-					 * If you want to override this in a child theme, then include a file
-					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-					 */
-					get_template_part( 'template-parts/content', get_post_format() );
-				?>
+				endwhile;
 
-			<?php endwhile; ?>
-			
-				<?php cleanblog_posts_navigation(); ?>
+			else :
 
-			<?php else : ?>
+				get_template_part( 'loop', 'empty' );
 
-				<?php get_template_part( 'template-parts/content', 'none' ); ?>
+			endif;
+		?>
+		<div class="pagination">
 
-			<?php endif; ?>
+			<?php get_template_part( 'template-part', 'pagination' ); ?>
 
-			<?php do_action('cleanblog_index_bottom'); ?>
-			
-			</div>
-			<!-- /.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1 -->
+		</div>
+	</section>
 
 <?php get_footer(); ?>

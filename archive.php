@@ -1,52 +1,86 @@
 <?php
 /**
- * The template for displaying archive pages.
+ * pink-charity-blog template for displaying Archives
  *
- * Learn more: http://codex.wordpress.org/Template_Hierarchy
- *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
 
 get_header(); ?>
 
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+	<section class="page-content primary" role="main"><?php
 
-			<?php do_action('cleanblog_archive_top'); ?>
+		if ( have_posts() ) : ?>
 
-			<?php if ( have_posts() ) : ?>
-
-			<header class="page-header">
+			<h1 class="archive-title">
 				<?php
-					the_archive_title( '<h4 class="page-title">', '</h4>' );
-					the_archive_description( '<div class="taxonomy-description">', '</div>' );
+					if ( is_category() ):
+						printf( __( 'Category Archives: %s', 'pink-charity-blog' ), single_cat_title( '', false ) );
+
+					elseif ( is_tag() ):
+						printf( __( 'Tag Archives: %s', 'pink-charity-blog' ), single_tag_title( '', false ) );
+
+					elseif ( is_tax() ):
+						$term     = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+						$taxonomy = get_taxonomy( get_query_var( 'taxonomy' ) );
+						printf( __( '%s Archives: %s', 'pink-charity-blog' ), $taxonomy->labels->singular_name, $term->name );
+
+					elseif ( is_day() ) :
+						printf( __( 'Daily Archives: %s', 'pink-charity-blog' ), get_the_date() );
+
+					elseif ( is_month() ) :
+						printf( __( 'Monthly Archives: %s', 'pink-charity-blog' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'pink-charity-blog' ) ) );
+
+					elseif ( is_year() ) :
+						printf( __( 'Yearly Archives: %s', 'pink-charity-blog' ), get_the_date( _x( 'Y', 'yearly archives date format', 'pink-charity-blog' ) ) );
+
+					elseif ( is_author() ) : the_post();
+						printf( __( 'All posts by %s', 'pink-charity-blog' ), get_the_author() );
+
+					else :
+						_e( 'Archives', 'pink-charity-blog' );
+
+					endif;
 				?>
-			</header><!-- .page-header -->
+			</h1><?php
 
-				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
-				<?php
+			if ( is_category() || is_tag() || is_tax() ):
+				$term_description = term_description();
+				if ( ! empty( $term_description ) ) : ?>
 
-					/*
-					 * Include the Post-Format-specific template for the content.
-					 * If you want to override this in a child theme, then include a file
-					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-					 */
-					get_template_part( 'template-parts/content', get_post_format() );
-				?>
+					<div class="archive-description"><?php
+						echo $term_description; ?>
+					</div><?php
 
-			<?php endwhile; ?>
-			
-				<?php cleanblog_posts_navigation(); ?>
+				endif;
+			endif;
 
-			<?php else : ?>
+			if ( is_author() && get_the_author_meta( 'description' ) ) : ?>
 
-				<?php get_template_part( 'template-parts/content', 'none' ); ?>
+				<div class="archive-description">
+					<?php the_author_meta( 'description' ); ?>
+				</div><?php
 
-			<?php endif; ?>
-			
-			<?php do_action('cleanblog_archive_bottom'); ?>
+			endif;
 
-			</div>
-			<!-- /.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1 -->
+			while ( have_posts() ) : the_post();
+
+				get_template_part( 'loop', get_post_format() );
+
+			endwhile;
+
+		else :
+
+			get_template_part( 'loop', 'empty' );
+
+		endif; ?>
+
+		<div class="pagination">
+
+			<?php get_template_part( 'template-part', 'pagination' ); ?>
+
+		</div>
+	</section>
 
 <?php get_footer(); ?>

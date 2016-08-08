@@ -1,30 +1,48 @@
 <?php
 /**
- * The template for displaying all pages.
+ * pink-charity-blog template for displaying Pages
  *
- * This is the template that displays all pages by default.
- * Please note that this is the WordPress construct of pages
- * and that other 'pages' on your WordPress site will use a
- * different template.
- *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
 
 get_header(); ?>
 
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+	<section class="page-content primary" role="main">
 
-			<?php do_action('cleanblog_page_top'); ?>
+		<?php
+			if ( have_posts() ) : the_post();
 
-			<?php while ( have_posts() ) : the_post(); ?>
+				get_template_part( 'loop' ); ?>
 
-				<?php get_template_part( 'template-parts/content', 'page' ); ?>
+				<aside class="post-aside"><?php
 
-			<?php endwhile; // End of the loop. ?>
-			
-			<?php do_action('cleanblog_page_bottom'); ?>
+					wp_link_pages(
+						array(
+							'before'           => '<div class="linked-page-nav"><p>' . sprintf( __( '<em>%s</em> is separated in multiple parts:', 'pink-charity-blog' ), get_the_title() ) . '<br />',
+							'after'            => '</p></div>',
+							'next_or_number'   => 'number',
+							'separator'        => ' ',
+							'pagelink'         => __( '&raquo; Part %', 'pink-charity-blog' ),
+						)
+					); ?>
 
-			</div>
-			<!-- /.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1 -->
+					<?php
+						if ( comments_open() || get_comments_number() > 0 ) :
+							comments_template( '', true );
+						endif;
+					?>
+
+				</aside><?php
+
+			else :
+
+				get_template_part( 'loop', 'empty' );
+
+			endif;
+		?>
+
+	</section>
 
 <?php get_footer(); ?>

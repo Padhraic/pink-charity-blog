@@ -1,170 +1,116 @@
 <?php
 /**
- * Clean Blog functions and definitions
+ * pink-charity-blog functions file
  *
- * @package Clean Blog
+ * @package WordPress
+ * @subpackage pink-charity-blog
+ * @since pink-charity-blog 1.0
  */
 
-if ( ! function_exists( 'cleanblog_setup' ) ) :
-/**
- * Sets up theme defaults and registers support for various WordPress features.
- *
- * Note that this function is hooked into the after_setup_theme hook, which
- * runs before the init hook. The init hook is too late for some features, such
- * as indicating support for post thumbnails.
- */
-function cleanblog_setup() {
-	/*
-	 * Make theme available for translation.
-	 * Translations can be filed in the /languages/ directory.
-	 * If you're building a theme based on Clean Blog, use a find and replace
-	 * to change 'cleanblog' to the name of your theme in all the template files
-	 */
-	load_theme_textdomain( 'cleanblog', get_template_directory() . '/languages' );
 
-	// Add default posts and comments RSS feed links to head.
-	add_theme_support( 'automatic-feed-links' );
+/******************************************************************************\
+	Theme support, standard settings, menus and widgets
+\******************************************************************************/
 
-	/*
-	 * Let WordPress manage the document title.
-	 * By adding theme support, we declare that this theme does not use a
-	 * hard-coded <title> tag in the document head, and expect WordPress to
-	 * provide it for us.
-	 */
-	add_theme_support( 'title-tag' );
+add_theme_support( 'post-formats', array( 'image', 'quote', 'status', 'link' ) );
+add_theme_support( 'post-thumbnails' );
+add_theme_support( 'automatic-feed-links' );
 
-	/*
-	 * Enable support for Post Thumbnails on posts and pages.
-	 *
-	 * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
-	 */
-	add_theme_support( 'post-thumbnails' );
-
-	// This theme uses wp_nav_menu() in one location.
-	register_nav_menus( array(
-		'primary' => esc_html__( 'Primary Menu', 'cleanblog' ),
-	) );
-
-	/*
-	 * Switch default core markup for search form, comment form, and comments
-	 * to output valid HTML5.
-	 */
-	add_theme_support( 'html5', array(
-		'search-form',
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'caption',
-	) );
-
-	/*
-	 * Enable support for Post Formats.
-	 * See http://codex.wordpress.org/Post_Formats
-	 */
-	//	add_theme_support( 'post-formats', array(
-	//		'aside',
-	//		'image',
-	//		'video',
-	//		'quote',
-	//		'link',
-	//	) );
-
-	// Set up the WordPress core custom background feature.
-	add_theme_support( 'custom-background', apply_filters( 'cleanblog_custom_background_args', array(
-		'default-color' => 'ffffff',
-		'default-image' => '',
-	) ) );
-}
-endif; // cleanblog_setup
-add_action( 'after_setup_theme', 'cleanblog_setup' );
+$custom_header_args = array(
+	'width'         => 980,
+	'height'        => 300,
+	'default-image' => get_template_directory_uri() . '/images/header.png',
+);
+add_theme_support( 'custom-header', $custom_header_args );
 
 /**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * Priority 0 to make it available to lower priority callbacks.
- *
- * @global int $content_width
+ * Print custom header styles
+ * @return void
  */
-function cleanblog_content_width() {
-	$GLOBALS['content_width'] = apply_filters( 'cleanblog_content_width', 750 );
-}
-add_action( 'after_setup_theme', 'cleanblog_content_width', 0 );
-
-/**
- * Enqueue scripts and styles.
- */
-function cleanblog_scripts() {
-	wp_enqueue_style( 'cleanblog-style', get_stylesheet_uri() );
-	wp_enqueue_style( 'cleanblog-bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css' );
-	wp_enqueue_style( 'cleanblog-theme', get_template_directory_uri() . '/css/clean-blog.min.css' );
-	wp_enqueue_style( 'cleanblog-fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' );
-	wp_enqueue_style( 'cleanblog-lora', '//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' );
-	wp_enqueue_style( 'cleanblog-opensans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' );
-
-	wp_enqueue_script( 'cleanblog-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20150803', true );
-	wp_enqueue_script( 'cleanblog-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20150803', true );
-	wp_enqueue_script( 'cleanblog-jquery', get_template_directory_uri() . '/js/jquery.min.js', array(), '20150803', true );
-	wp_enqueue_script( 'cleanblog-bootstrap', get_template_directory_uri() . '/js/bootstrap.min.js', array(), '20150803', true );
-	wp_enqueue_script( 'cleanblog-theme', get_template_directory_uri() . '/js/clean-blog.min.js', array(), '20150803', true );
-
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
+function pink-charity-blog_custom_header() {
+	$styles = '';
+	if ( $color = get_header_textcolor() ) {
+		echo '<style type="text/css"> ' .
+				'.site-header .logo .blog-name, .site-header .logo .blog-description {' .
+					'color: #' . $color . ';' .
+				'}' .
+			 '</style>';
 	}
 }
-add_action( 'wp_enqueue_scripts', 'cleanblog_scripts' );
+add_action( 'wp_head', 'pink-charity-blog_custom_header', 11 );
 
-/**
- * Custom template tags for this theme.
- */
-require get_template_directory() . '/inc/template-tags.php';
+$custom_bg_args = array(
+	'default-color' => 'fba919',
+	'default-image' => '',
+);
+add_theme_support( 'custom-background', $custom_bg_args );
 
-/**
- * Custom functions that act independently of the theme templates.
- */
-require get_template_directory() . '/inc/extras.php';
+register_nav_menu( 'main-menu', __( 'Your sites main menu', 'pink-charity-blog' ) );
 
-/**
- * Customizer additions.
- */
-require get_template_directory() . '/inc/customizer.php';
+if ( function_exists( 'register_sidebars' ) ) {
+	register_sidebar(
+		array(
+			'id' => 'home-sidebar',
+			'name' => __( 'Home widgets', 'pink-charity-blog' ),
+			'description' => __( 'Shows on home page', 'pink-charity-blog' )
+		)
+	);
 
-/**
- * Load Jetpack compatibility file.
- */
-require get_template_directory() . '/inc/jetpack.php';
-
-/**
- * Remove container DIV from navigation menu in header.
- */
-function my_wp_nav_menu_args( $args = '' ) {
-	$args['container'] = false;
-	return $args;
+	register_sidebar(
+		array(
+			'id' => 'footer-sidebar',
+			'name' => __( 'Footer widgets', 'pink-charity-blog' ),
+			'description' => __( 'Shows in the sites footer', 'pink-charity-blog' )
+		)
+	);
 }
-add_filter( 'wp_nav_menu_args', 'my_wp_nav_menu_args' );
+
+if ( ! isset( $content_width ) ) $content_width = 650;
 
 /**
- * Customizing the excerpt
+ * Include editor stylesheets
+ * @return void
  */
-
-// Customize the excerpt length
-function custom_excerpt_length( $length ) {
-	return 60;
+function pink-charity-blog_editor_style() {
+    add_editor_style( 'css/wp-editor-style.css' );
 }
-add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
+add_action( 'init', 'pink-charity-blog_editor_style' );
 
-// Add a Read More link to the end of the excerpt
-function custom_excerpt_more( $more ) {
-	return ' ... <a class="read-more" href="' . get_permalink( get_the_ID() ) . '">' . __( 'Read More', 'cleanblog' ) . '</a>';
-}
-add_filter( 'excerpt_more', 'custom_excerpt_more' );
 
-// Add a class to the <p> wrap around the excerpt
-function add_class_to_excerpt( $excerpt ) {
-    return str_replace('<p', '<p class="excerpt"', $excerpt);
-}
-add_filter( "the_excerpt", "add_class_to_excerpt" );
+/******************************************************************************\
+	Scripts and Styles
+\******************************************************************************/
 
 /**
- * Require Github Updater plugin for theme update checks
+ * Enqueue pink-charity-blog scripts
+ * @return void
  */
-require get_template_directory() . '/inc/install-github-updater.php';
+function pink-charity-blog_enqueue_scripts() {
+	wp_enqueue_style( 'pink-charity-blog-styles', get_stylesheet_uri(), array(), '1.0' );
+	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'default-scripts', get_template_directory_uri() . '/js/scripts.min.js', array(), '1.0', true );
+	if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
+}
+add_action( 'wp_enqueue_scripts', 'pink-charity-blog_enqueue_scripts' );
+
+
+/******************************************************************************\
+	Content functions
+\******************************************************************************/
+
+/**
+ * Displays meta information for a post
+ * @return void
+ */
+function pink-charity-blog_post_meta() {
+	if ( get_post_type() == 'post' ) {
+		echo sprintf(
+			__( 'Posted %s in %s%s by %s. ', 'pink-charity-blog' ),
+			get_the_time( get_option( 'date_format' ) ),
+			get_the_category_list( ', ' ),
+			get_the_tag_list( __( ', <b>Tags</b>: ', 'pink-charity-blog' ), ', ' ),
+			get_the_author_link()
+		);
+	}
+	edit_post_link( __( ' (edit)', 'pink-charity-blog' ), '<span class="edit-link">', '</span>' );
+}
