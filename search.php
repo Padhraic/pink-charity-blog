@@ -1,57 +1,43 @@
 <?php
 /**
- * pink-charity-blog template for displaying Search-Results-Pages
- *
  * @package WordPress
  * @subpackage pink-charity-blog
  * @since pink-charity-blog 1.0
  */
+ get_header(); ?>
 
-get_header(); ?>
+	<?php if (have_posts()) : ?>
 
-	<section class="page-content primary" role="main"><?php
+		<h2><?php _e('Search Results','pinkcharityblog'); ?></h2>
 
-		if ( have_posts() ) : ?>
+		<?php post_navigation(); ?>
 
-			<div class="search-title">
-				<h1 ><?php printf( __( 'Search Results for: %s', 'pink-charity-blog' ), get_search_query() ); ?></h1>
+		<?php while (have_posts()) : the_post(); ?>
 
-				<div class="second-search">
-					<p>
-						<?php _e( 'Not what you searched for? Try again with some different keywords.', 'pink-charity-blog' ); ?>
-					</p>
+			<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
 
-					<?php get_search_form(); ?>
+				<h2><?php the_title(); ?></h2>
+
+				<?php posted_on(); ?>
+
+				<div class="entry">
+
+					<?php the_excerpt(); ?>
+
 				</div>
-			</div><?php
 
-			while ( have_posts() ) : the_post();
+			</article>
 
-				get_template_part( 'loop', get_post_format() );
+		<?php endwhile; ?>
 
-				wp_link_pages(
-					array(
-						'before'           => '<div class="linked-page-nav"><p>' . sprintf( __( '<em>%s</em> is separated in multiple parts:', 'pink-charity-blog' ), get_the_title() ) . '<br />',
-						'after'            => '</p></div>',
-						'next_or_number'   => 'number',
-						'separator'        => ' ',
-						'pagelink'         => __( '&raquo; Part %', 'pink-charity-blog' ),
-					)
-				);
+		<?php post_navigation(); ?>
 
-			endwhile;
+	<?php else : ?>
 
-		else :
+		<h2><?php _e('Nothing Found','pinkcharityblog'); ?></h2>
 
-			get_template_part( 'loop', 'empty' );
+	<?php endif; ?>
 
-		endif; ?>
-
-		<div class="pagination">
-
-			<?php get_template_part( 'template-part', 'pagination' ); ?>
-
-		</div>
-	</section>
+<?php get_sidebar(); ?>
 
 <?php get_footer(); ?>

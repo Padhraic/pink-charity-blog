@@ -1,116 +1,182 @@
 <?php
 /**
- * pink-charity-blog functions file
- *
  * @package WordPress
  * @subpackage pink-charity-blog
  * @since pink-charity-blog 1.0
  */
 
-
-/******************************************************************************\
-	Theme support, standard settings, menus and widgets
-\******************************************************************************/
-
-add_theme_support( 'post-formats', array( 'image', 'quote', 'status', 'link' ) );
-add_theme_support( 'post-thumbnails' );
-add_theme_support( 'automatic-feed-links' );
-
-$custom_header_args = array(
-	'width'         => 980,
-	'height'        => 300,
-	'default-image' => get_template_directory_uri() . '/images/header.png',
-);
-add_theme_support( 'custom-header', $custom_header_args );
-
-/**
- * Print custom header styles
- * @return void
- */
-function pink-charity-blog_custom_header() {
-	$styles = '';
-	if ( $color = get_header_textcolor() ) {
-		echo '<style type="text/css"> ' .
-				'.site-header .logo .blog-name, .site-header .logo .blog-description {' .
-					'color: #' . $color . ';' .
-				'}' .
-			 '</style>';
+	// Options Framework (https://github.com/devinsays/options-framework-plugin)
+	if ( !function_exists( 'optionsframework_init' ) ) {
+		define( 'OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/_inc/' );
+		require_once dirname( __FILE__ ) . '/_inc/options-framework.php';
 	}
-}
-add_action( 'wp_head', 'pink-charity-blog_custom_header', 11 );
 
-$custom_bg_args = array(
-	'default-color' => 'fba919',
-	'default-image' => '',
-);
-add_theme_support( 'custom-background', $custom_bg_args );
+	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
+	function pinkcharityblog_setup() {
+		load_theme_textdomain( 'pinkcharityblog', get_template_directory() . '/languages' );
+		add_theme_support( 'automatic-feed-links' );
+		add_theme_support( 'structured-post-formats', array( 'link', 'video' ) );
+		add_theme_support( 'post-formats', array( 'aside', 'audio', 'chat', 'gallery', 'image', 'quote', 'status' ) );
+		register_nav_menu( 'primary', __( 'Navigation Menu', 'pinkcharityblog' ) );
+		add_theme_support( 'post-thumbnails' );
+	}
+	add_action( 'after_setup_theme', 'pinkcharityblog_setup' );
 
-register_nav_menu( 'main-menu', __( 'Your sites main menu', 'pink-charity-blog' ) );
+	// Scripts & Styles (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
+	/**
+ 	* Enqueue pinkcharityblog scripts
+ 	* @return void
+ 	*/
+	// Load jQuery
+	if ( !is_admin() ) {
+	   wp_deregister_script('jquery');
+	   wp_register_script('jquery', ("http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"), false);
+	   wp_enqueue_script('jquery');
+	}
 
-if ( function_exists( 'register_sidebars' ) ) {
-	register_sidebar(
-		array(
-			'id' => 'home-sidebar',
-			'name' => __( 'Home widgets', 'pink-charity-blog' ),
-			'description' => __( 'Shows on home page', 'pink-charity-blog' )
-		)
-	);
-
-	register_sidebar(
-		array(
-			'id' => 'footer-sidebar',
-			'name' => __( 'Footer widgets', 'pink-charity-blog' ),
-			'description' => __( 'Shows in the sites footer', 'pink-charity-blog' )
-		)
-	);
-}
-
-if ( ! isset( $content_width ) ) $content_width = 650;
-
-/**
- * Include editor stylesheets
- * @return void
- */
-function pink-charity-blog_editor_style() {
-    add_editor_style( 'css/wp-editor-style.css' );
-}
-add_action( 'init', 'pink-charity-blog_editor_style' );
+	    
+	function pinkcharityblog_enqueue_scripts() {
+	    wp_enqueue_style( 'pinkcharityblog-styles', get_template_directory_uri() . '/static/css/style.css' ); //our stylesheet
+	    wp_enqueue_script( 'jquery' );
+	    wp_enqueue_script( 'default-scripts', get_template_directory_uri() . '/static/js/footer.js', array(), '1.0', true );
+	    if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
+	}
+	add_action( 'wp_enqueue_scripts', 'pinkcharityblog_enqueue_scripts' );
 
 
-/******************************************************************************\
-	Scripts and Styles
-\******************************************************************************/
 
-/**
- * Enqueue pink-charity-blog scripts
- * @return void
- */
-function pink-charity-blog_enqueue_scripts() {
-	wp_enqueue_style( 'pink-charity-blog-styles', get_stylesheet_uri(), array(), '1.0' );
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'default-scripts', get_template_directory_uri() . '/js/scripts.min.js', array(), '1.0', true );
-	if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
-}
-add_action( 'wp_enqueue_scripts', 'pink-charity-blog_enqueue_scripts' );
+	
+
+	// WP Title (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
+	function pinkcharityblog_wp_title( $title, $sep ) {
+		global $paged, $page;
+
+		if ( is_feed() )
+			return $title;
+
+//		 Add the site name.
+		$title .= get_bloginfo( 'name' );
+
+//		 Add the site description for the home/front page.
+		$site_description = get_bloginfo( 'description', 'display' );
+		if ( $site_description && ( is_home() || is_front_page() ) )
+			$title = "$title $sep $site_description";
+
+//		 Add a page number if necessary.
+		if ( $paged >= 2 || $page >= 2 )
+			$title = "$title $sep " . sprintf( __( 'Page %s', 'pinkcharityblog' ), max( $paged, $page ) );
+//FIX
+//		if (function_exists('is_tag') && is_tag()) {
+//		   single_tag_title("Tag Archive for &quot;"); echo '&quot; - '; }
+//		elseif (is_archive()) {
+//		   wp_title(''); echo ' Archive - '; }
+//		elseif (is_search()) {
+//		   echo 'Search for &quot;'.wp_specialchars($s).'&quot; - '; }
+//		elseif (!(is_404()) && (is_single()) || (is_page())) {
+//		   wp_title(''); echo ' - '; }
+//		elseif (is_404()) {
+//		   echo 'Not Found - '; }
+//		if (is_home()) {
+//		   bloginfo('name'); echo ' - '; bloginfo('description'); }
+//		else {
+//		    bloginfo('name'); }
+//		if ($paged>1) {
+//		   echo ' - page '. $paged; }
+
+		return $title;
+	}
+	add_filter( 'wp_title', 'pinkcharityblog_wp_title', 10, 2 );
 
 
-/******************************************************************************\
-	Content functions
-\******************************************************************************/
 
-/**
- * Displays meta information for a post
- * @return void
- */
-function pink-charity-blog_post_meta() {
-	if ( get_post_type() == 'post' ) {
-		echo sprintf(
-			__( 'Posted %s in %s%s by %s. ', 'pink-charity-blog' ),
-			get_the_time( get_option( 'date_format' ) ),
-			get_the_category_list( ', ' ),
-			get_the_tag_list( __( ', <b>Tags</b>: ', 'pink-charity-blog' ), ', ' ),
-			get_the_author_link()
+
+	// Custom Menu
+	register_nav_menu( 'primary', __( 'Navigation Menu', 'pinkcharityblog' ) );
+
+	// Widgets
+	if ( function_exists('register_sidebar' )) {
+		function pinkcharityblog_widgets_init() {
+			register_sidebar( array(
+				'name'          => __( 'Sidebar Widgets', 'pinkcharityblog' ),
+				'id'            => 'sidebar-primary',
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			) );
+		}
+		add_action( 'widgets_init', 'pinkcharityblog_widgets_init' );
+	}
+
+	// Navigation - update coming from twentythirteen
+	function post_navigation() {
+		echo '<div class="navigation">';
+		echo '	<div class="next-posts">'.get_next_posts_link('&laquo; Older Entries').'</div>';
+		echo '	<div class="prev-posts">'.get_previous_posts_link('Newer Entries &raquo;').'</div>';
+		echo '</div>';
+	}
+
+	// Posted On
+	function posted_on() {
+		printf( __( '<span class="sep">Posted </span><a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a> by <span class="byline author vcard">%5$s</span>', '' ),
+			esc_url( get_permalink() ),
+			esc_attr( get_the_time() ),
+			esc_attr( get_the_date( 'c' ) ),
+			esc_html( get_the_date() ),
+			esc_attr( get_the_author() )
 		);
 	}
-	edit_post_link( __( ' (edit)', 'pink-charity-blog' ), '<span class="edit-link">', '</span>' );
+
+
+
+
+
+/* Uncomment to add custom image sizes
+
+function pinkcharityblog_add_image_sizes() {
+    add_image_size( 'pinkcharityblog-thumb', 300, 100, true );
+    add_image_size( 'pinkcharityblog-large', 600, 300, true );
 }
+add_action( 'init', 'pinkcharityblog_add_image_sizes' );
+ 
+
+
+function pinkcharityblog_show_image_sizes($sizes) {
+    $sizes['pinkcharityblog-thumb'] = __( 'pink-charity-blog Thumb', 'pinkcharityblog' );
+    $sizes['pinkcharityblog-large'] = __( 'pink-charity-blog Large', 'pinkcharityblog' );
+ 
+    return $sizes;
+}
+add_filter('image_size_names_choose', 'pinkcharityblog_show_image_sizes');
+
+*/
+
+
+
+
+
+/* Uncomment to add minimum image upload sizes
+
+add_filter('wp_handle_upload_prefilter','pinkcharityblog_handle_upload_prefilter');
+//Set the minimum file sizes
+$minimumWidth = '640';
+$minimumHeight = '480';
+
+function pinkcharityblog_handle_upload_prefilter($file)
+{
+
+    $img=getimagesize($file['tmp_name']);
+    $minimum = array('width' => $minimumWidth, 'height' => $minimumHeight);
+    $width= $img[0];
+    $height =$img[1];
+
+    if ($width < $minimum['width'] )
+        return array("error"=>"Image dimensions are too small. Minimum width is {$minimum['width']}px. Uploaded image width is $width px");
+
+    elseif ($height <  $minimum['height'])
+        return array("error"=>"Image dimensions are too small. Minimum height is {$minimum['height']}px. Uploaded image height is $height px");
+    else
+        return $file; 
+}
+*/
+?>

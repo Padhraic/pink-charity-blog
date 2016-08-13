@@ -1,86 +1,64 @@
 <?php
 /**
- * pink-charity-blog template for displaying Archives
- *
  * @package WordPress
  * @subpackage pink-charity-blog
  * @since pink-charity-blog 1.0
  */
+ get_header(); ?>
 
-get_header(); ?>
+		<?php if (have_posts()) : ?>
 
-	<section class="page-content primary" role="main"><?php
+ 			<?php $post = $posts[0]; // Hack. Set $post so that the_date() works. ?>
 
-		if ( have_posts() ) : ?>
+			<?php /* If this is a category archive */ if (is_category()) { ?>
+				<h2><?php _e('Archive for the','pinkcharityblog'); ?> &#8216;<?php single_cat_title(); ?>&#8217; <?php _e('Category','pinkcharityblog'); ?></h2>
 
-			<h1 class="archive-title">
-				<?php
-					if ( is_category() ):
-						printf( __( 'Category Archives: %s', 'pink-charity-blog' ), single_cat_title( '', false ) );
+			<?php /* If this is a tag archive */ } elseif( is_tag() ) { ?>
+				<h2><?php _e('Posts Tagged','pinkcharityblog'); ?> &#8216;<?php single_tag_title(); ?>&#8217;</h2>
 
-					elseif ( is_tag() ):
-						printf( __( 'Tag Archives: %s', 'pink-charity-blog' ), single_tag_title( '', false ) );
+			<?php /* If this is a daily archive */ } elseif (is_day()) { ?>
+				<h2><?php _e('Archive for','pinkcharityblog'); ?> <?php the_time('F jS, Y'); ?></h2>
 
-					elseif ( is_tax() ):
-						$term     = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-						$taxonomy = get_taxonomy( get_query_var( 'taxonomy' ) );
-						printf( __( '%s Archives: %s', 'pink-charity-blog' ), $taxonomy->labels->singular_name, $term->name );
+			<?php /* If this is a monthly archive */ } elseif (is_month()) { ?>
+				<h2><?php _e('Archive for','pinkcharityblog'); ?> <?php the_time('F, Y'); ?></h2>
 
-					elseif ( is_day() ) :
-						printf( __( 'Daily Archives: %s', 'pink-charity-blog' ), get_the_date() );
+			<?php /* If this is a yearly archive */ } elseif (is_year()) { ?>
+				<h2 class="pagetitle"><?php _e('Archive for','pinkcharityblog'); ?> <?php the_time('Y'); ?></h2>
 
-					elseif ( is_month() ) :
-						printf( __( 'Monthly Archives: %s', 'pink-charity-blog' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'pink-charity-blog' ) ) );
+			<?php /* If this is an author archive */ } elseif (is_author()) { ?>
+				<h2 class="pagetitle"><?php _e('Author Archive','pinkcharityblog'); ?></h2>
 
-					elseif ( is_year() ) :
-						printf( __( 'Yearly Archives: %s', 'pink-charity-blog' ), get_the_date( _x( 'Y', 'yearly archives date format', 'pink-charity-blog' ) ) );
+			<?php /* If this is a paged archive */ } elseif (isset($_GET['paged']) && !empty($_GET['paged'])) { ?>
+				<h2 class="pagetitle"><?php _e('Blog Archives','pinkcharityblog'); ?></h2>
+			
+			<?php } ?>
 
-					elseif ( is_author() ) : the_post();
-						printf( __( 'All posts by %s', 'pink-charity-blog' ), get_the_author() );
+			<?php post_navigation(); ?>
 
-					else :
-						_e( 'Archives', 'pink-charity-blog' );
+			<?php while (have_posts()) : the_post(); ?>
+			
+				<article <?php post_class() ?>>
+				
+						<h2 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2>
+					
+						<?php posted_on(); ?>
 
-					endif;
-				?>
-			</h1><?php
+						<div class="entry">
+							<?php the_content(); ?>
+						</div>
 
-			if ( is_category() || is_tag() || is_tax() ):
-				$term_description = term_description();
-				if ( ! empty( $term_description ) ) : ?>
+				</article>
 
-					<div class="archive-description"><?php
-						echo $term_description; ?>
-					</div><?php
+			<?php endwhile; ?>
 
-				endif;
-			endif;
+			<?php post_navigation(); ?>
+			
+	<?php else : ?>
 
-			if ( is_author() && get_the_author_meta( 'description' ) ) : ?>
+		<h2><?php _e('Nothing Found','pinkcharityblog'); ?></h2>
 
-				<div class="archive-description">
-					<?php the_author_meta( 'description' ); ?>
-				</div><?php
+	<?php endif; ?>
 
-			endif;
-
-			while ( have_posts() ) : the_post();
-
-				get_template_part( 'loop', get_post_format() );
-
-			endwhile;
-
-		else :
-
-			get_template_part( 'loop', 'empty' );
-
-		endif; ?>
-
-		<div class="pagination">
-
-			<?php get_template_part( 'template-part', 'pagination' ); ?>
-
-		</div>
-	</section>
+<?php get_sidebar(); ?>
 
 <?php get_footer(); ?>

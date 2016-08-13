@@ -1,45 +1,41 @@
 <?php
 /**
- * pink-charity-blog Index template
- *
  * @package WordPress
  * @subpackage pink-charity-blog
  * @since pink-charity-blog 1.0
  */
+ get_header(); ?>
 
-get_header(); ?>
+	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-	<section class="page-content primary" role="main">
-		<?php
-			if ( have_posts() ):
+		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
 
-				while ( have_posts() ) : the_post();
+			<h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2>
 
-					get_template_part( 'loop', get_post_format() );
+			<?php posted_on(); ?>
 
-					wp_link_pages(
-						array(
-							'before'           => '<div class="linked-page-nav"><p>' . sprintf( __( '<em>%s</em> is separated in multiple parts:', 'pink-charity-blog' ), get_the_title() ) . '<br />',
-							'after'            => '</p></div>',
-							'next_or_number'   => 'number',
-							'separator'        => ' ',
-							'pagelink'         => __( '&raquo; Part %', 'pink-charity-blog' ),
-						)
-					);
+			<div class="entry">
+				<?php the_content(); ?>
+			</div>
 
-				endwhile;
+			<footer class="postmetadata">
+				<?php the_tags(__('Tags: ','pinkcharityblog'), ', ', '<br />'); ?>
+				<?php _e('Posted in','pinkcharityblog'); ?> <?php the_category(', ') ?> | 
+				<?php comments_popup_link(__('No Comments &#187;','pinkcharityblog'), __('1 Comment &#187;','pinkcharityblog'), __('% Comments &#187;','pinkcharityblog')); ?>
+			</footer>
 
-			else :
+		</article>
 
-				get_template_part( 'loop', 'empty' );
+	<?php endwhile; ?>
 
-			endif;
-		?>
-		<div class="pagination">
+	<?php post_navigation(); ?>
 
-			<?php get_template_part( 'template-part', 'pagination' ); ?>
+	<?php else : ?>
 
-		</div>
-	</section>
+		<h2><?php _e('Nothing Found','pinkcharityblog'); ?></h2>
+
+	<?php endif; ?>
+
+<?php get_sidebar(); ?>
 
 <?php get_footer(); ?>

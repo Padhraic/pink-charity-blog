@@ -1,43 +1,39 @@
 <?php
 /**
- * pink-charity-blog template for displaying Single-Posts
- *
  * @package WordPress
  * @subpackage pink-charity-blog
  * @since pink-charity-blog 1.0
  */
+ get_header(); ?>
 
-get_header(); ?>
+	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-	<section class="page-content primary" role="main">
+		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
+			
+			<h1 class="entry-title"><?php the_title(); ?></h1>
 
-		<?php
-			if ( have_posts() ) : the_post();
+			<div class="entry-content">
+				
+				<?php the_content(); ?>
 
-				get_template_part( 'loop', get_post_format() ); ?>
+				<?php wp_link_pages(array('before' => __('Pages: ','pinkcharityblog'), 'next_or_number' => 'number')); ?>
+				
+				<?php the_tags( __('Tags: ','pinkcharityblog'), ', ', ''); ?>
+			
+				<?php posted_on(); ?>
 
-				<aside class="post-aside">
+			</div>
+			
+			<?php edit_post_link(__('Edit this entry','pinkcharityblog'),'','.'); ?>
+			
+		</article>
 
-					<div class="post-links">
-						<?php previous_post_link( '%link', __( '&laquo; Previous post', 'pink-charity-blog' ) ) ?>
-						<?php next_post_link( '%link', __( 'Next post &raquo;', 'pink-charity-blog' ) ); ?>
-					</div>
+	<?php comments_template(); ?>
 
-					<?php
-						if ( comments_open() || get_comments_number() > 0 ) :
-							comments_template( '', true );
-						endif;
-					?>
+	<?php endwhile; endif; ?>
 
-				</aside><?php
-
-			else :
-
-				get_template_part( 'loop', 'empty' );
-
-			endif;
-		?>
-
-	</section>
+<?php post_navigation(); ?>
+	
+<?php get_sidebar(); ?>
 
 <?php get_footer(); ?>
