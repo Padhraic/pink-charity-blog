@@ -112,23 +112,45 @@
 		}
 	?>
 
+	<link rel="apple-touch-icon" sizes="57x57" href="/static/images/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/images/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/images/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/images/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/images/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/images/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/images/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/images/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/images/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png" />
+    <link rel="manifest" href="/static/images/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/static/images/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+
 	<link rel="profile" href="http://gmpg.org/xfn/11" />
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
 
 	<?php wp_head(); ?>
 
 </head>
 
 <body <?php body_class(); ?>>
-
-	<!-- not needed? up to you: http://camendesign.com/code/developpeurs_sans_frontieres -->
-	<div id="wrapper">
-
-		<header id="header" role="banner">
-			<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-			<div class="description"><?php bloginfo( 'description' ); ?></div>
-		</header>
-
+	<div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=426919827482208&version=v2.3";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+	<a id="menu-toggle" href="#" class="btn btn-light btn-lg toggle"><i class="fa fa-bars"></i></a>
 		<nav id="nav" role="navigation">
 			<?php wp_nav_menu( array('menu' => 'primary') ); ?>
 		</nav>

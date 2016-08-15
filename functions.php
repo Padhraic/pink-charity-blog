@@ -34,10 +34,17 @@
 	   wp_enqueue_script('jquery');
 	}
 
+	// Load jQuery
+	if ( !is_admin() ) {
+	   wp_deregister_script('bootstrap');
+	   wp_register_script('bootstrap', ("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"), false);
+	   wp_enqueue_script('bootstrap');
+	}
 	    
 	function pinkcharityblog_enqueue_scripts() {
 	    wp_enqueue_style( 'pinkcharityblog-styles', get_template_directory_uri() . '/static/css/style.css' ); //our stylesheet
 	    wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'bootstrap' );
 	    wp_enqueue_script( 'default-scripts', get_template_directory_uri() . '/static/js/footer.js', array(), '1.0', true );
 	    if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 	}

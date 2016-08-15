@@ -3,26 +3,269 @@
 Style sheet for pink-charity-blog
 
 */
+/*
+ * Start Bootstrap - Stylish Portfolio Bootstrap Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
 
-//Load the site variables
-@import 'variables';
+/* Global Styles */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.text-vertical-center {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-vertical-center h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 4.5em;
+    font-weight: 700;
+}
+
+.text-vertical-bottom {
+    display: table-cell;
+    text-align:end;
+    vertical-align: middle;
+}
+
+.text-vertical-bottom h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 4.5em;
+    font-weight: 700;
+}
+
+.margin-above {
+    margin-top: 25px;
+}
+/* Custom Button Styles */
+
+.btn-dark {
+    border-radius: 5px;
+    border-color: #fff;
+    border: white 4px solid;
+    color: #fff;
+    background-color: rgb(242,134,183);/*pettle pink*/
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    color: #fff;
+    background-color: #00a0e4; /*flower pettle blue*/
+}
+
+.btn-light {
+    border-radius: 5px;
+    border: rgb(242,134,183) solid 4px;/*pettle pink*/
+    color: rgb(242,134,183); /*lettering*/
+    background-color: rgb(255,255,255);
+}
+
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
+    border-color: #00a0e4; /*flower pettle blue*/
+    color: #00a0e4; /*flower pettle blue*/
+    background-color: rgb(255,255,255);
+}
+
+/* Custom Horizontal Rule */
+
+hr.small {
+    max-width: 100px;
+}
+
+/* Side Menu */
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    margin-right: -250px;
+    overflow-y: auto;
+    background: rgb(242,134,183);
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+    
+    border-left: #ffffff solid 4px;
+}
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 246px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: #00a0e4; /*flower pettle blue*/
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 55px;
+    font-size: 18px;
+    line-height: 55px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #fff;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: #00a0e4; /*flower pettle blue*/
+}
+
+#menu-toggle {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+#sidebar-wrapper.active {
+    right: 250px;
+    width: 250px;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.toggle {
+    margin: 5px 5px 0 0;
+}
+
+/* Header */
+
+.img-responsive-header {
+      display: block;
+      max-width: 100%;
+    height: 80%;
+}
 
 
-//load anything that is used to create other elements
-@import 'constructors/generic-placeholder';//see notes in file
-@import 'constructors/functions';
-@import 'constructors/clearfix';//see notes in file
+/* About */
 
-//Core styles
-@import 'core/reset'; //normalize is also available
+.about {
+    padding-top: 70px;
+    padding-bottom: 50px;
+}
+
+/* Services */
+
+.pink-background {
+    padding: 50px 0;    
+    background: url(../img/LoveLillyFlower-small.jpg) no-repeat left top scroll;
+    background-color: rgb(242,134,183);
+}
+
+.service-item {
+    margin-bottom: 30px;
+}
+
+/* Callout */
+
+.callout {
+    display: table;
+    width: 100%;
+    height: 400px;
+    color: #fff;
+    background: url(../img/callout.jpg) no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+/* Portfolio */
+
+.portfolio {
+    padding: 50px 0;
+}
+
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.img-portfolio {
+    margin: 0 auto;
+}
+    
+
+.contact {
+    padding: 70px 0;
+}
 
 
-//Modules for things like nav, content
-//@import 'modules/module-name';
+/* Footer */
 
-//Default Wordpress classes for your enjoyment/ hacking!
-@import 'modules/wp-core';
+footer {
+    padding: 70px 0;
+}
 
+.float-top-left {
+    float: left;
+    vertical-align: top;
+}
+/*
+.carousel-inner > .item > img {
+    margin: 0 auto;
+}*/
+.has-error {
+    border-width: 2px;
+    border-color: red;
+}
+.validation.text-danger:after {
+    content: 'A problem was found in the highlighted fields';
+}
+.required.blank:after {
+    content: 'Required field';
+}
 
-//Print styles & misc.
-@import 'modules/print';
+.box-light {
+    border-radius: 5px;
+    border: rgb(242,134,183) solid 4px;/*pettle pink*/
+    color: rgb(242,134,183); /*lettering*/
+    background-color: rgb(255,255,255);
+}
+

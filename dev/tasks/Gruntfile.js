@@ -167,6 +167,12 @@ module.exports = function (grunt) {
           // includes files within path
           {expand: true, cwd: '../src/fonts', src: ['**/*'], dest: '../../static/fonts', filter: 'isFile'},
         ]
+      },
+      production:{
+        files:[
+          //include all files except dev and production
+          {expand: true, cwd: '../..', src:['**/*','!**/production/**','!**/dev/**'], dest: '../../../../../wwwroot/lovelilly/wp-content/themes/pink-charity-blog'}
+        ]
       }
     },
     //end copy
@@ -209,7 +215,7 @@ module.exports = function (grunt) {
   grunt.registerTask('init',       ['notify:initStart', 'bowercopy', 'copy:js', 'copy:images', 'sass:dev','notify:initDone']);
 
   //RUN FOR PRODUCTION 
-  grunt.registerTask('prod',       ['notify:distStart', 'bowercopy', 'prepJS', 'prepImages', 'prepStyles', 'prepFonts', 'compress:production', 'notify:distDone']);
+  grunt.registerTask('prod',       ['notify:distStart', 'bowercopy', 'prepJS', 'prepImages', 'prepStyles', 'prepFonts'/*, 'compress:production'*/, 'copy:production', 'notify:distDone']);
   
   //DEFAULT
   grunt.registerTask('default', []);
