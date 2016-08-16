@@ -26,7 +26,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="@Url.Action("Donate")">
+                            <a href="<?php of_get_option('meta_footer_donate_url'); ?>">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                                     <i class="fa fa-eur fa-stack-1x text-background"></i>
@@ -34,7 +34,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo get_permalink('about'); ?>">
+                            <a href="<?php of_get_option('meta_footer_about_url'); ?>">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                                     <i class="fa fa-heart fa-stack-1x text-background"></i>
@@ -45,8 +45,8 @@
                     <hr class="small" />
                     <ul class="list-inline">
                         <li><p class="text-muted">Copyright &copy; lovelilly.ie <?php echo date("Y"); ?></p></li>
-                        <li><p class="text-muted"><a href="<?php echo get_permalink('terms-conditions'); ?>">Terms &and; Conditions</a></p></li>
-                        <li><p class="text-muted"><a href="<?php echo get_permalink('privacy-security'); ?>">Privacy &and; security statement</a></p></li>
+                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_terms_conditions_url'); ?>">Terms &and; Conditions</a></p></li>
+                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_security_statement_url'); ?>">Privacy &and; security statement</a></p></li>
                         <li><p class="text-muted"><a href="mailto:lovelillytrust@gmail.com?subject=Webmaster">Contact webmaster</a></p></li>
                     </ul>
                 </div>

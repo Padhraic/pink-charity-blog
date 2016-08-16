@@ -179,6 +179,32 @@ function optionsframework_options() {
 		'std' => '',
 		'type' => 'upload');
 
+// Footer options
+	$options[] = array(
+		'name' => __('', 'pinkcharityblog'),
+		'desc' => __('About page url', 'pinkcharityblog'),
+		'id' => 'meta_footer_about_url',
+		'std' => '',
+		'type' => 'text');
+
+		$options[] = array(
+		'name' => __('', 'pinkcharityblog'),
+		'desc' => __('Terms & conditions url', 'pinkcharityblog'),
+		'id' => 'meta_footer_terms_conditions_url',
+		'std' => '',
+		'type' => 'text');
+		$options[] = array(
+		'name' => __('', 'pinkcharityblog'),
+		'desc' => __('ASecurity Statement url', 'pinkcharityblog'),
+		'id' => 'meta_footer_security_statement_url',
+		'std' => '',
+		'type' => 'text');
+		$options[] = array(
+		'name' => __('', 'pinkcharityblog'),
+		'desc' => __('Donate page url', 'pinkcharityblog'),
+		'id' => 'meta_footer_donate_url',
+		'std' => '',
+		'type' => 'text');
 	return $options;
 
 	/* FIELD OPTIONS */
