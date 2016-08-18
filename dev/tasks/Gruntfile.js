@@ -43,6 +43,22 @@ module.exports = function (grunt) {
       },
     },
     // end watch
+
+    // ftp deploy
+    'ftp-deploy': {
+      build: {
+        auth: {
+          host: 'ftp1.reg365.net',
+          port: 21,
+          authKey: 'key1'
+        },
+        src: '../../production',
+        dest: '/web/wp-content/themes/pink-charity-blog',
+        exclusions: ['**/production/**', '**/dev/**', '**/.git/**', '**/.gitignore/**']
+      }
+    },
+    // end ftp deploy
+
     //sass
     sass: { // Task
       dev: { // Target
@@ -171,6 +187,12 @@ module.exports = function (grunt) {
       production:{
         files:[
           //include all files except dev and production
+          {expand: true, cwd: '../..', src:['**/*','!**/production/**','!**/dev/**','!**/.git/**','!**/.gitignore'], dest: '../../production'}
+        ]
+      },
+      macserver:{
+        files:[
+          //include all files except dev and production
           {expand: true, cwd: '../..', src:['**/*','!**/production/**','!**/dev/**'], dest: '../../../../../wwwroot/lovelilly/wp-content/themes/pink-charity-blog'}
         ]
       }
@@ -215,7 +237,7 @@ module.exports = function (grunt) {
   grunt.registerTask('init',       ['notify:initStart', 'bowercopy', 'copy:js', 'copy:images', 'sass:dev','notify:initDone']);
 
   //RUN FOR PRODUCTION 
-  grunt.registerTask('prod',       ['notify:distStart', 'bowercopy', 'prepJS', 'prepImages', 'prepStyles', 'prepFonts'/*, 'compress:production'*/, 'copy:production', 'notify:distDone']);
+  grunt.registerTask('prod',       ['notify:distStart', 'bowercopy', 'prepJS', 'prepImages', 'prepStyles', 'prepFonts'/*, 'compress:production'*/, 'copy:production', 'copy:macserver','ftp-deploy:build', 'notify:distDone']);
   
   //DEFAULT
   grunt.registerTask('default', []);
