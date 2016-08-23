@@ -8,8 +8,8 @@ module.exports = function (grunt) {
     //watch
     watch: {
       css: {
-        files: '../src/scss/**/*.scss',
-        tasks: ['sass:dev', 'autoprefixer', 'notify:sassDone'],
+        files: '../src/css/**/*.css',
+        tasks: ['copy:css'],
         options: {
           livereload: true,
         },
@@ -59,29 +59,6 @@ module.exports = function (grunt) {
     },
     // end ftp deploy
 
-    //sass
-    sass: { // Task
-      dev: { // Target
-        options: { // Target options
-          style: 'expanded',
-          //sourcemap: true,
-        },
-        files: { // Dictionary of files
-          '../../static/css/style.css': '../src/scss/style.scss',
-          '../../static/css/ie.css': '../src/scss/ie.scss',
-        }
-      },
-      dist: { // Target
-        options: { // Target options
-          style: 'expanded',
-        },
-        files: { // Dictionary of files
-          '../../static/css/style.css': '../src/scss/style.scss',
-          '../../static/css/ie.css': '../src/scss/ie.scss',
-        }
-      }
-    },
-    // end sass
     
     //auto prefixer
     autoprefixer: {
@@ -166,6 +143,12 @@ module.exports = function (grunt) {
     //end Bower copy
     //copy
     copy: {
+      css: {
+        files: [
+          // includes files within path
+          {expand: true, cwd: '../src/css', src: ['*.css','*.css.map'], dest: '../../static/css', filter: 'isFile'},
+        ]
+      },
       js: {
         files: [
           // includes files within path
@@ -229,12 +212,12 @@ module.exports = function (grunt) {
   
   //Asset pipelines
   grunt.registerTask('prepJS',     [ 'copy:js' ]);
-  grunt.registerTask('prepStyles', [ 'sass:dist', 'autoprefixer', 'cssmin' ]);
+  grunt.registerTask('prepStyles', [ 'copy:css', 'cssmin' ]);
   grunt.registerTask('prepImages', [ 'copy:images', 'imagemin:dynamic' ]);
   grunt.registerTask('prepFonts',  [ 'copy:fonts' ]);
 
   //RUN ON START
-  grunt.registerTask('init',       ['notify:initStart', 'bowercopy', 'copy:js', 'copy:images', 'sass:dev','notify:initDone']);
+  grunt.registerTask('init',       ['notify:initStart', 'bowercopy', 'copy:js', 'copy:images', 'copy:css','notify:initDone']);
 
   //RUN FOR PRODUCTION 
   grunt.registerTask('prod',       ['notify:distStart', 'bowercopy', 'prepJS', 'prepImages', 'prepStyles', 'prepFonts'/*, 'compress:production'*/, 'copy:production', 'copy:macserver','ftp-deploy:build', 'notify:distDone']);

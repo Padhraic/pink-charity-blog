@@ -45,9 +45,9 @@
                     <hr class="small" />
                     <ul class="list-inline">
                         <li><p class="text-muted">Copyright &copy; lovelilly.ie <?php echo date("Y"); ?></p></li>
-                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_terms_conditions_url'); ?>">Terms &and; Conditions</a></p></li>
-                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_security_statement_url'); ?>">Privacy &and; security statement</a></p></li>
-                        <li><p class="text-muted"><a href="mailto:lovelillytrust@gmail.com?subject=Webmaster">Contact webmaster</a></p></li>
+                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_terms_conditions_url'); ?>">Terms &amp; Conditions</a></p></li>
+                        <li><p class="text-muted"><a href="<?php of_get_option('meta_footer_security_statement_url'); ?>">Privacy &amp; security statement</a></p></li>
+                        <li><p class="text-muted"><a href="mailto:lovelillycharity@gmail.com?subject=Webmaster">Contact webmaster</a></p></li>
                     </ul>
                 </div>
 

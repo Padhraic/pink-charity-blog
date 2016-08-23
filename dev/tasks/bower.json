@@ -4,7 +4,7 @@
   "dependencies": {
   	"modernizr": "~2.6.2",
     "jquery": "~1.10.2",
-    "bootstrap-sass": "3.3.7"
+    "bootstrap-less": "3.3.4"
    }
 }
 
